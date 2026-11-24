@@ -11,6 +11,10 @@ A very lightweight PDF viewer (Python + GTK3 + Poppler), built for smart boards 
 - **Jump to page** by typing a page number
 - Single file, no pip dependencies, **0% CPU when idle**
 
+## Why
+
+Every PDF viewer we tried on our Pardus smart board lagged, even the ones that are supposed to be lightweight. FastDoc exists to fix that: it does only what a board needs (read, scroll, zoom, jump to a page) and nothing more.
+
 ## Install
 
 ```sh

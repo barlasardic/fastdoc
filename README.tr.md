@@ -6,6 +6,10 @@
 
 Çok hafif PDF görüntüleyici (Python + GTK3 + Poppler). Pardus ve diğer Debian tabanlı sistemler için yapıldı.
 
+## Neden
+
+Pardus'lu akıllı tahtada denediğimiz her PDF okuyucu, hafif olduğu söylenenler bile, kasıyordu. FastDoc bunu çözmek için var: bir tahtanın ihtiyacı olanı (okuma, kaydırma, yakınlaştırma, sayfaya gitme) yapar, fazlasını yapmaz.
+
 ## Kurulum
 
 ```sh
