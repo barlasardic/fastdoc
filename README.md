@@ -1,37 +1,55 @@
 # FastDoc
 
-Çok hafif PDF görüntüleyici (Python + GTK3 + Poppler). Pardus ve diğer Debian tabanlı sistemler için yapıldı.
+[English](README.md) | [Türkçe](README.tr.md)
 
-## Kurulum
+A very lightweight PDF viewer (Python + GTK3 + Poppler), built for smart boards and low-end machines running Pardus and other Debian-based systems.
+
+- **Continuous scrolling** with a collapsible page thumbnail sidebar
+- **Zoom** with buttons, touch pinch, or Ctrl+wheel
+- **Jump to page** by typing a page number
+- Single file, no pip dependencies, **0% CPU when idle**
+
+## Install
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/install.sh | sh
 ```
 
-Betik şunları yapar:
-- Eksikse `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0`, `gir1.2-poppler-0.18` paketlerini `apt` ile kurar (sudo ister).
-- Programı `~/.local/bin/fastdoc` olarak kurar.
-- Uygulama menüsüne ekler ve **varsayılan PDF uygulaması** yapar. PDF'e çift tıklayınca FastDoc açılır.
+The script:
+- Installs `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0` and `gir1.2-poppler-0.18` with `apt` if missing (asks for sudo).
+- Installs the program as `~/.local/bin/fastdoc`.
+- Adds it to the application menu and sets it as the **default PDF application**, so double-clicking a PDF opens FastDoc.
 
-Kaldırma: `curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/uninstall.sh | sh`
-
-## Kullanım
+Uninstall:
 
 ```sh
-fastdoc dosya.pdf
+curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/uninstall.sh | sh
 ```
 
-| İşlem | Nasıl |
+## Usage
+
+```sh
+fastdoc file.pdf
+```
+
+| Action | How |
 |---|---|
-| Gezinme | Sayfalar alt alta kesintisiz akar; tekerlek, dokunmatik kaydırma, `↑` `↓`, boşluk |
-| Sayfa listesi (sol) | Buton veya `F9` ile aç/kapat; küçük resme dokununca o sayfaya gider |
-| Sayfaya git | Kutuya numara yaz + Enter, ok butonları, `PgUp`/`PgDn`, `Home`/`End` |
-| Yakınlaştır / uzaklaştır | `+` / `-` butonları, `+` `-` tuşları, Ctrl+tekerlek, dokunmatik pinch |
-| Genişliğe sığdır | Buton veya `0` |
-| Aç | Buton veya Ctrl+O |
+| Scroll | Pages flow continuously: mouse wheel, touch scrolling, `↑` `↓`, space |
+| Page sidebar (left) | Toggle with the button or `F9`; tap a thumbnail to jump to that page |
+| Go to page | Type a number in the box + Enter, arrow buttons, `PgUp`/`PgDn`, `Home`/`End` |
+| Zoom in / out | `+` / `-` buttons, `+` `-` keys, Ctrl+wheel, touch pinch |
+| Fit to width | Button or `0` |
+| Open file | Button or Ctrl+O |
 
-## Hafiflik
+## Lightweight by design
 
-- Tek dosya (`fastdoc.py`), ek pip bağımlılığı yok; sadece sistemdeki GTK3, Poppler ve cairo.
-- Yalnızca ekranda görünen sayfalar çizilir; çizilmiş sayfa önbelleği 64 MB ile sınırlıdır.
-- Boştayken CPU kullanmaz (zamanlayıcı/döngü yok).
+- One file (`fastdoc.py`) using only the system's GTK3, Poppler and cairo.
+- Only the pages visible on screen are rendered; the rendered-page cache is capped at 64 MB.
+- No timers or polling loops, so it uses no CPU while idle.
+- Measured on a 123-page PDF: about 91 MB RAM after opening, 109 MB after scrolling the whole document (a bare GTK window is ~67 MB).
+
+## Requirements
+
+Debian-based system (Pardus, Debian, Ubuntu) with Python 3 and GTK 3. The installer takes care of the rest.
+
+> The interface is currently in Turkish.
