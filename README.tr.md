@@ -1,4 +1,6 @@
-# FastDoc
+<p align="center"><img src="assets/logo.svg" width="96" alt="FastDoc logosu"></p>
+
+<h1 align="center">FastDoc</h1>
 
 [English](README.md) | **Türkçe**
 
@@ -12,10 +14,30 @@ curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/install.sh
 
 Betik şunları yapar:
 - Eksikse `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0`, `gir1.2-poppler-0.18` paketlerini `apt` ile kurar (sudo ister).
-- Programı `~/.local/bin/fastdoc` olarak kurar.
-- Uygulama menüsüne ekler ve **varsayılan PDF uygulaması** yapar. PDF'e çift tıklayınca FastDoc açılır.
+- Programı `~/.local/bin/fastdoc` olarak kurar; logosuyla birlikte uygulama menüsüne ve PDF'ler için "Birlikte aç" listesine ekler.
+- Varsayılan PDF uygulamasını **değiştirmez**.
 
-Kaldırma: `curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/uninstall.sh | sh`
+FastDoc'u varsayılan PDF uygulaması yap (isteğe bağlı):
+
+```sh
+fastdoc --set-default
+```
+
+(ya da kurarken `... | sh -s -- --default`)
+
+## Güncelleme
+
+```sh
+fastdoc --update
+```
+
+GitHub'daki son sürüme bakar, yenisi varsa yeniden kurar. Normal açılışta hiçbir şey kontrol edilmez ya da indirilmez. Kurulum komutunu tekrar çalıştırmak da işe yarar.
+
+## Kaldırma
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/uninstall.sh | sh
+```
 
 ## Kullanım
 

@@ -4,6 +4,7 @@
 Sürekli kaydırma, açılıp kapanan sayfa listesi (küçük resimler), sayfa numarası
 yazıp gitme ve yakınlaştırma (butonlar, dokunmatik pinch, Ctrl+tekerlek).
 """
+import os
 import sys
 from bisect import bisect_right
 from collections import OrderedDict
@@ -16,6 +17,16 @@ gi.require_version("Gdk", "3.0")
 gi.require_version("Poppler", "0.18")
 from gi.repository import Gdk, Gio, GLib, GObject, Gtk, Poppler  # noqa: E402
 
+VERSION = "0.2.0"
+RAW_URL = "https://raw.githubusercontent.com/barlasardic/fastdoc/main"
+USAGE = """FastDoc {v} - hafif PDF görüntüleyici
+
+Kullanım:
+  fastdoc [dosya.pdf]     PDF'i aç
+  fastdoc --update        Yeni sürüm varsa güncelle
+  fastdoc --set-default   Varsayılan PDF uygulaması yap
+  fastdoc --version       Sürümü göster
+"""
 ZOOM_MIN, ZOOM_MAX, ZOOM_STEP = 0.2, 6.0, 1.25
 PAD = 8                      # sayfalar arası boşluk (px)
 BG = (0.82, 0.82, 0.84)
@@ -298,6 +309,7 @@ class FastDoc(Gtk.Window):
     def __init__(self):
         super().__init__(title="FastDoc")
         self.set_default_size(1000, 700)
+        self.set_icon_name("fastdoc")
         self._pinch_base = 1.0
 
         # --- araç çubuğu ---
@@ -470,13 +482,63 @@ class FastDoc(Gtk.Window):
         return True
 
 
+def self_update():
+    """GitHub'daki sürüme bakar; yenisi varsa kurulum betiğini çalıştırır.
+    Ağ yalnızca bu komutta kullanılır, normal açılışta hiçbir şey indirilmez."""
+    import re
+    import subprocess
+    import urllib.request
+
+    raw = os.environ.get("FASTDOC_RAW", RAW_URL)
+    try:
+        with urllib.request.urlopen(f"{raw}/fastdoc.py", timeout=10) as r:
+            m = re.search(rb'^VERSION = "([\d.]+)"', r.read(), re.M)
+        with urllib.request.urlopen(f"{raw}/install.sh", timeout=10) as r:
+            installer = r.read()
+    except OSError as e:
+        print(f"Güncelleme kontrolü başarısız: {e}", file=sys.stderr)
+        return 1
+    if not m:
+        print("Uzaktaki sürüm okunamadı.", file=sys.stderr)
+        return 1
+
+    def ver(s):
+        return tuple(int(x) for x in s.split("."))
+
+    remote = m.group(1).decode()
+    if ver(remote) <= ver(VERSION):
+        print(f"FastDoc güncel ({VERSION}).")
+        return 0
+    print(f"Güncelleniyor: {VERSION} -> {remote}")
+    return subprocess.run(["sh", "-s"], input=installer).returncode
+
+
+def set_default():
+    import subprocess
+    rc = subprocess.call(["xdg-mime", "default", "fastdoc.desktop", "application/pdf"])
+    print("FastDoc varsayılan PDF uygulaması yapıldı." if rc == 0 else "xdg-mime başarısız oldu.")
+    return rc
+
+
 def main():
+    args = sys.argv[1:]
+    if args and args[0].startswith("-"):
+        if args[0] in ("-v", "--version"):
+            print(f"FastDoc {VERSION}")
+            return 0
+        if args[0] == "--update":
+            return self_update()
+        if args[0] == "--set-default":
+            return set_default()
+        print(USAGE.format(v=VERSION), end="")
+        return 0 if args[0] in ("-h", "--help") else 2
     win = FastDoc()
     win.show_all()
-    if len(sys.argv) > 1:
-        GLib.idle_add(win.load, sys.argv[1])
+    if args:
+        GLib.idle_add(win.load, args[0])
     Gtk.main()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

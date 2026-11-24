@@ -1,4 +1,6 @@
-# FastDoc
+<p align="center"><img src="assets/logo.svg" width="96" alt="FastDoc logo"></p>
+
+<h1 align="center">FastDoc</h1>
 
 [English](README.md) | [Türkçe](README.tr.md)
 
@@ -17,10 +19,26 @@ curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/install.sh
 
 The script:
 - Installs `python3-gi`, `python3-gi-cairo`, `gir1.2-gtk-3.0` and `gir1.2-poppler-0.18` with `apt` if missing (asks for sudo).
-- Installs the program as `~/.local/bin/fastdoc`.
-- Adds it to the application menu and sets it as the **default PDF application**, so double-clicking a PDF opens FastDoc.
+- Installs the program as `~/.local/bin/fastdoc` and adds it (with its logo) to the application menu and the "Open with" list for PDFs.
+- Does **not** change your default PDF application.
 
-Uninstall:
+Make FastDoc the default PDF viewer (optional):
+
+```sh
+fastdoc --set-default
+```
+
+(or install with `... | sh -s -- --default`)
+
+## Update
+
+```sh
+fastdoc --update
+```
+
+Checks the latest version on GitHub and reinstalls only if there is a newer one. Nothing is checked or downloaded at normal startup. Re-running the install command also works.
+
+## Uninstall
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/barlasardic/fastdoc/main/uninstall.sh | sh
